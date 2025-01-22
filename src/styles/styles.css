@@ -1,0 +1,21 @@
+.swiper-button-next {
+	color: rgb(121, 146, 131) !important;
+	position: absolute;
+	transition: 0.3s;
+}
+
+.swiper-button-prev {
+	color: rgb(121, 146, 131) !important;
+	position: absolute;
+	transition: 0.3s;
+}
+
+.swiper-button-prev:hover,
+.swiper-button-next:hover {
+	transform: scale(1.08);
+    color: rgb(19, 88, 70) !important;
+}
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled {
+	opacity: 0.1 !important;
+}
