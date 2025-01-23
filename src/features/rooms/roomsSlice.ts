@@ -4,7 +4,9 @@ import { RootState } from "../../app/store";
 import { apiRequest } from "../../utils/apiRequest";
 
 export const fetchRooms = createAsyncThunk('rooms/fetchRooms', () => {
-  return apiRequest('rooms', 'GET');
+  const url = `api/rooms`; 
+  console.log(url);
+  return apiRequest(url, 'GET'); 
 })
 
 export const fetchRoom = createAsyncThunk('rooms/fetchRoom', (id: string | undefined) => {
@@ -40,8 +42,9 @@ const roomsSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchRooms.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
-        state.data = action.payload;
+        console.log("Respuesta de la API en Redux:", action.payload); // 
+        state.status = "fulfilled";
+        state.data = Array.isArray(action.payload) ? action.payload : []; // que sea un array
       })
       .addCase(fetchRoom.pending, (state) => {
         state.status = 'pending';

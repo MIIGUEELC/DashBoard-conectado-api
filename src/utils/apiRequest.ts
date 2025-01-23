@@ -2,15 +2,19 @@ import { bodyInterface } from "../features/interfaces/interfaces";
 
 const urlBase = import.meta.env.VITE_API_URL;
 
+
 export const apiRequest = async (endpoint: string, method: string, body?: bodyInterface) => {
   try {
+    const token = localStorage.getItem('token'); // Obtener el token
+
     const result = await fetch(`${urlBase}/${endpoint}`, {
-      method: `${method}`,
+      method: method,
       headers: {
         "Content-Type": "application/json",
-        Authorization: `${localStorage.getItem('token')}`,
+       
+        Authorization: token ? `Bearer ${token}` : '', 
       },
-      body: JSON.stringify(body)
+      body: body ? JSON.stringify(body) : null, 
     });
 
     if (!result.ok) {
@@ -24,5 +28,4 @@ export const apiRequest = async (endpoint: string, method: string, body?: bodyIn
     console.error("Error en la solicitud:", error);
     throw error;
   }
-}
-
+};
