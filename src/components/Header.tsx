@@ -66,7 +66,7 @@ export const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const contactsData = useAppSelector(getContacts);
+  const contactsData = useAppSelector(getContacts) || [];
   const handleLogout = () => {
     dispatchLogin({ type: "LOGOUT", payload: null });
     localStorage.removeItem("token");
@@ -102,15 +102,16 @@ export const Header = () => {
           <InnerRight>
             <HeaderButton onClick={() => navigate("/contact")}>{icons.message}</HeaderButton>
             <NonReadMessages>
-              {contactsData.reduce((accumulator, currentValue) => {
-                if (currentValue.status === "Not Archived") {
-                  return accumulator + 1;
-                } else {
-                  return accumulator;
-                }
-              }, 0)}
+              {Array.isArray(contactsData)
+                ? contactsData.reduce((accumulator, currentValue) => {
+                  if (currentValue.status === "Not Archived") {
+                    return accumulator + 1;
+                  } else {
+                    return accumulator;
+                  }
+                }, 0)
+                : 0}
             </NonReadMessages>
-
             <HeaderButton>{icons.bell}</HeaderButton>
             <HeaderButton onClick={handleLogout}>{icons.logout}</HeaderButton>
           </InnerRight>

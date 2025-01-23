@@ -9,7 +9,6 @@ export const userLogin = createAsyncThunk('login/userLogin', async (data: LoginI
     try {
         const response = (await fetch(urlBase, {
             method: 'POST',
-            mode: 'cors',
             headers: {
                 "Content-Type": "application/json",
             },
@@ -22,7 +21,8 @@ export const userLogin = createAsyncThunk('login/userLogin', async (data: LoginI
             throw new Error(`status: ${response.status}`)
         } else {
             const data = await response.json();
-            localStorage.setItem("token", data.token);
+            localStorage.setItem("token", data);
+            
         }
 
     } catch (error) {

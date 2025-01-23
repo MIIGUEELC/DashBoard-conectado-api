@@ -6,10 +6,9 @@ export const apiRequest = async (endpoint: string, method: string, body?: bodyIn
   try {
     const result = await fetch(`${urlBase}/${endpoint}`, {
       method: `${method}`,
-      mode: 'cors',
       headers: {
         "Content-Type": "application/json",
-        token: `${localStorage.getItem('token')}`,
+        Authorization: `${localStorage.getItem('token')}`,
       },
       body: JSON.stringify(body)
     });

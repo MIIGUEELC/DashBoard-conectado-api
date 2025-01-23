@@ -4,10 +4,11 @@ import { ContactsInterface, IContactsInitialState } from '../interfaces/interfac
 import { RootState } from '../../app/store';
 
 
-export const fetchContacts = createAsyncThunk('contacts/fetchContacts', () => {
-  return apiRequest('contacts','GET');
-})
-
+export const fetchContacts = createAsyncThunk("contacts/fetchContacts", async () => {
+  const response = await apiRequest("contacts", "GET");
+  console.log("Response from API:", response, Array.isArray(response)); 
+  return response;
+});
 export const fetchContact = createAsyncThunk('contacts/fetchContact', (id:string | undefined) => {
     return apiRequest(`contacts/${id}`,'GET');
   })
@@ -36,10 +37,10 @@ const contactsSlice = createSlice({
   reducers: {},
   extraReducers:(builder) => {
     builder
-      .addCase(fetchContacts.fulfilled, (state, action) => {
-        state.status = 'fulfilled';
-        state.data = action.payload;
-      })
+    .addCase(fetchContacts.fulfilled, (state, action) => {
+      state.status = "fulfilled";
+      state.data = Array.isArray(action.payload) ? action.payload : []; //cambiamos que sea un array
+    })
       .addCase(fetchContact.pending, (state) => {
         state.status = 'pending';
         state.item = null;
