@@ -99,6 +99,7 @@ export const Bookings = () => {
   const [filter, setFilter] = useState("All Bookings");
   const [orderBy, setOrderBy] = useState<keyof BookingsInterface>("guest");
   const [search, setSearch] = useState("");
+
   const filterOrderSearch = (
     array: BookingsInterface[],
     filter: string,
@@ -109,21 +110,23 @@ export const Bookings = () => {
       (booking: BookingsInterface) =>
         filter === "All Bookings" || booking.status === filter
     );
-    if (orderBy === "guest") {
-      filteredArray.sort((a: BookingsInterface, b: BookingsInterface) =>
-        a.guest.localeCompare(b.guest, undefined, { sensitivity: "base" })
-      );
-    } else {
-      filteredArray.sort((a: BookingsInterface, b: BookingsInterface) => {
-        const dateComparison =
-          new Date(a[orderBy] as string).getTime() -
-          new Date(b[orderBy] as string).getTime();
-        if (dateComparison === 0) {
-          return a.guest.localeCompare(b.guest);
+  
+    filteredArray.sort((a: BookingsInterface, b: BookingsInterface) => {
+      if (orderBy === "guest") {
+        return (a.guest || "").localeCompare(b.guest || "", undefined, {
+          sensitivity: "base",
+        });
+      } else {
+        const dateA = a[orderBy] ? new Date(a[orderBy] as string).getTime() : 0;
+        const dateB = b[orderBy] ? new Date(b[orderBy] as string).getTime() : 0;
+  
+        if (dateA === dateB) {
+          return (a.guest || "").localeCompare(b.guest || "");
         }
-        return dateComparison;
-      });
-    }
+        return dateA - dateB;
+      }
+    });
+  
     return filteredArray.filter((item) =>
       Object.values(item).some(
         (value) =>
@@ -132,7 +135,6 @@ export const Bookings = () => {
       )
     );
   };
-
   useEffect(() => {
     dispatch(fetchBookings());
   }, [dispatch]);
@@ -182,8 +184,8 @@ export const Bookings = () => {
       label: "Special Request",
       display: ({ special_request }: BookingsInterface) => (
         <ViewNotes
-          specialrequest={special_request.length}
-          message={special_request}
+          specialrequest={special_request ? special_request.length : 0} 
+          message={special_request || "No special request"} 
         />
       ),
     },

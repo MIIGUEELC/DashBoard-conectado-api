@@ -3,8 +3,10 @@ import {IBookingsInitialState, BookingsInterface } from '../../features/interfac
 import { RootState } from "../../app/store";
 import { apiRequest } from "../../utils/apiRequest";
 
-export const fetchBookings = createAsyncThunk('bookings/fetchBookings', () => {
-    return apiRequest('bookings','GET');
+export const fetchBookings = createAsyncThunk('bookings/fetchBookings',async () => {
+  const url = `api/bookings`; 
+  console.log(url);
+  return apiRequest(url, 'GET');
 })
 
 export const fetchBooking = createAsyncThunk('bookings/fetchBooking', (id:string | undefined) => {

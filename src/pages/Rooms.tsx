@@ -195,9 +195,11 @@ export const Rooms = () => {
       property: "room_info",
       label: "Room Info",
       display: ({ _id, room_number, room_photo }: RoomsInterface) => {
+        const hasPhoto = Array.isArray(room_photo) && room_photo.length > 0;
+      
         return (
           <>
-            {room_photo[0] === "" ? (
+            {!hasPhoto ? (
               <H4>No photo</H4>
             ) : (
               <RoomPhoto src={room_photo[0]} />
@@ -220,15 +222,18 @@ export const Rooms = () => {
       property: "amenities",
       label: "Amenities",
       display: ({ amenities }: RoomsInterface) => {
-        const displayAmenities = amenities.map((amenity, key) => {
-          return <Amenity key={key}>{amenity.name}</Amenity>;
-        });
+        if (!Array.isArray(amenities) || amenities.length === 0) {
+          return <p>No amenities available</p>; // Manejo seguro si no hay datos
+        }
+      
         return (
-          <>
-            <AmenitiesContainer>{displayAmenities}</AmenitiesContainer>
-          </>
+          <AmenitiesContainer>
+            {amenities.map((amenity, key) => (
+              <Amenity key={key}>{amenity.name}</Amenity>
+            ))}
+          </AmenitiesContainer>
         );
-      },
+      }
     },
     {
       property: "price",

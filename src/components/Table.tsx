@@ -114,22 +114,26 @@ type Row = BookingsInterface | RoomsInterface | ContactsInterface;
 export const Table = (props: TableProps) => {
   const { columns, data } = props;
 
-  const displayRow = (row: Row, index: number) => {
+  const displayRow = (row: Row | undefined, index: number) => {
+    if (!row) return null; 
+  
     const rowContent = (
       <>
         {props.columns.map((col: Column, i: number) => (
           <div key={i}>
             {typeof col.display === "function"
-              ? col.display(row)
-              : row[col.property as keyof Row]}
+              ? col.display(row) 
+              : row[col.property as keyof Row] ?? "N/A"} 
           </div>
         ))}
       </>
     );
-    const key = `${props.name}-${row._id}-${index}`;
-
+  
+    const key = `${props.name}-${row?._id || index}`;
+  
     return <RowContainer key={key}>{rowContent}</RowContainer>;
   };
+  
 
   return (
     <>
