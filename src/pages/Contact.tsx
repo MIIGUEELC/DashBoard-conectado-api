@@ -82,6 +82,8 @@ const TextFormatter = styled.span<Props>`
   text-decoration: ${(props) => props.decoration};
 `;
 
+// cambiar esto para que muestre los datos de la api
+
 export const Contact = () => {
   const dispatch = useAppDispatch();
   const contactsData = useAppSelector(getContacts);
